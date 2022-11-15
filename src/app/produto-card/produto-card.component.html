@@ -1,0 +1,66 @@
+<!-- ngIf -->
+<!--
+  ngIf serve para que a partir de uma determinada condição booleana
+  um elemento HTML ou componente apareça na sua tela ou não
+ -->
+
+<div class="card" *ngIf="mostrarProduto == true; else conteudoAlternativo">
+  <img [src]="prod.imagem" alt="" class="card-image-top">
+  <div class="card-body">
+    <h5 class="card-title">{{ prod.nome }}</h5>
+    <h6 class="card-subtitle text-muted">{{ prod.preco }}</h6>
+    <!--
+      menor ou igual a 10 -> vermelho
+      maior que 10 e  menor ou igual a 30 -> amarelo
+      maior que 30 e menor que 100 -> azul
+      maior que 100 -> verde
+
+      azul -> bg-primary
+      amarelo -> bg-warning
+      vermelho -> bg-danger
+      verde -> bg-success
+    -->
+    <!-- ngClass -->
+    <!--
+      ngClass te permite adicionar ou remover classes de um elemento a partir de
+      condições lógicas (boolianas)
+     -->
+    <span
+      class="badge mb-1"
+      [ngClass]="{
+        'bg-danger': prod.estoque <= 10,
+        'bg-warning': prod.estoque > 10 && prod.estoque <= 30,
+        'bg-primary': prod.estoque > 30 && prod.estoque < 100,
+        'bg-success': prod.estoque > 100
+      }"
+    >
+      {{ prod.estoque }} unidades restantes
+    </span>
+    <p class="card-text text-truncate">
+      {{ prod.descricao }}
+    </p>
+    <button class="btn btn-sm btn-danger" (click)="esconderProduto()">
+      Esconder Produto
+    </button>
+    <button class="btn btn-sm" (click)="emitirEventoDeletar()">
+      &times;
+    </button>
+  </div>
+</div>
+<!--
+  ng-template serve como um componente auxiliar
+  que nos permite criar a estrutura 'else' de algum
+  *ngIf
+
+  Por padrão, qualquer coisa que você coloque dentro
+  do componente aparecerá na sua tela. Para o conteúdo
+  aparecer, você precisará criar 'gatilho'
+ -->
+<ng-template #conteudoAlternativo>
+  <div class="card">
+    <div class="card-body">
+      <p class="card-text">O produto {{ prod.nome }} não aparecerá para os usuários desse site</p>
+      <button class="btn btn-danger" (click)="aparecerProduto()">Mostrar Novamente</button>
+    </div>
+  </div>
+</ng-template>
